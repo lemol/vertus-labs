@@ -1,0 +1,68 @@
+﻿<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>MRU</title>
+        <link href="../css/global.css" rel="stylesheet" />
+        <script src="../libs/jquery-1.4.1.js" type="text/javascript"></script>
+        <script src="../scripts/utilidades.js" type="text/javascript"></script>
+        <script src="../scripts/lsjo.js" type="text/javascript"></script>
+        <script src="../scripts/gaal.js" type="text/javascript"></script>
+        <script src="../scripts/cinematica.js" type="text/javascript"></script>
+        <script src="mru-1.js" type="text/javascript"></script>
+        <script>
+            var isMoviendo = false;
+            var escena;
+            $(function(){
+                escena = $('#cnt');
+                
+                setContext(escena.get(0).getContext('2d'));
+                
+                cargar();
+                drawRegla(ctx);
+                $('#btn_control').click(function(){
+                    
+                    isMoviendo = !isMoviendo;
+                    
+                    if( !isMoviendo ){
+                        $(this).attr('value', 'iniciar');
+                        parar();
+                    }
+                    else{
+                        $(this).attr('value', 'parar');
+                        var vel = parseFloat( $('#velocidad').attr('value') );
+                        c1.vel.x = mmToPixel(vel*10, 96);//*.033*94/25.4; //mmToPixel(vel, 96)*10/33;
+                        iniciar();
+                    }
+                    
+                });
+                
+                $('#btn_recargar').click(function(){
+                    cargar();
+                });
+                
+            });
+            
+        </script>
+    </head>
+    <body id="principal">
+        <div id="panel-control">
+            <fieldset>
+                <legend>Panel de Control</legend>
+                <label for="velocidad">Velocidad:</label><input type="text" name="velocidad" id="velocidad" value="10"/>
+            </fieldset>
+            <input type="button" value="iniciar" name="btn_control" id="btn_control"/>
+            <input type="button" value="recargar" name="btn_recargar" id="btn_recargar"/>
+        </div>
+        <div id="escena"><canvas id="cnt" width="700" height="500"></canvas></div>
+        <div id="resultados">
+            <fieldset>
+                <legend>Resultados</legend>
+                <p><label>Tiempo: </label> <label id="tiempo"></label></p>
+                <p><label>Velocidad: </label> <label id="vel"></label></p>
+                <p><label>Deplazamiento: </label> <label id="deplazamiento"></label></p>
+            </fieldset>
+        </div>
+    </body>
+</html>

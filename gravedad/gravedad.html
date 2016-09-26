@@ -1,0 +1,257 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Gravedad</title>
+    <style>
+        body
+        {
+            margin: 0px;
+        }
+        canvas
+        {
+            margin: 0px;
+            display: block;
+            border: 1px solid #ccc;
+        }
+    </style>
+    <script src="../libs/jquery-1.4.1.js" type="text/javascript"></script>
+    <script>
+        var XMax = 500, YMax = 500;
+        var Xi = 50, Yi = 500;
+        var Dx = 30, Dy = 37.795275590551181102362204724409;
+
+        var coords = {
+            getX: function () {
+                return this.x - Xi;
+            },
+            getY: function () {
+                return Yi - this.y;
+            },
+            setX: function (x) {
+                this.x = Xi + x;
+            },
+            setY: function (y) {
+                this.y = Yi - y;
+            },
+            masX: function (dx) {
+                return this.x = this.x + (dx || 1);
+            },
+            masY: function (dy) {
+                return this.y = this.y + (dy || 1);
+            }
+        };
+
+        var toCoord = function (o) {
+            for (var n in coords) {
+                o[n] = coords[n];
+            }
+        }
+
+    </script>
+    <script>
+
+        var canvas, context;
+
+        function ClassOf(base, imp) {
+
+            var cls = new Function();
+
+            cls.prototype = base.prototype;
+
+            for (var n in imp)
+                cls.prototype[n] = imp[n];
+
+            return cls;
+
+        }
+
+    </script>
+    <script>
+
+        function Particula(x, y, w, h, m) {
+
+            if (typeof x == 'object') {
+
+                y = x.y || 0;
+                w = x.w || 10;
+                h = x.h || 10;
+                m = x.m || 20;
+                x = x.x || 0;
+
+            }
+
+            this.x = x;
+            this.y = y;
+            this.w = w;
+            this.h = h;
+            this.m = m;
+
+        }
+
+        Particula.prototype = {
+
+            mover: function(dx, dy){
+                this.ir(this.x+dx, this.y+dy);
+            },
+
+            ir: function(x, y){
+                this.x = x;
+                this.y = y;
+            }
+
+        };
+
+        for (var n in coords) Particula.prototype[n] = coords[n];
+
+    </script>
+    <script>
+
+        var Bola = ClassOf(Particula, {
+
+            init: function (x, y, r, color) {
+                this.setX(x);
+                this.setY(y);
+                this.r = r;
+                this.color = color
+            },
+            draw: function () {
+                context.beginPath();
+                context.arc(this.x, this.y, this.r, 0, 2 * Math.PI);
+                context.closePath();
+                context.fillStyle = this.color;
+                context.fill();
+            },
+            clear: function () {
+                context.clearRect(this.limEsq() - 1, this.limSup() - 1, this.limDir(), this.limInf());
+            },
+            limSup: function () {
+                return this.y - this.r;
+            },
+            limInf: function () {
+                return this.y + this.r;
+            },
+            limEsq: function () {
+                return this.x - this.r;
+            },
+            limDir: function () {
+                return this.x + this.r;
+            }
+
+        });
+
+        function drawEjes() {
+            
+            context.beginPath();
+            context.strokeStyle = 'rgb(0, 0, 255)';
+            context.lineWidth = .5;
+            context.moveTo(40, 0);
+            context.lineTo(40, YMax);
+            context.stroke();
+
+            var p = new Object();
+            toCoord(p);
+
+            p.setX(-20);
+            p.setY(0);
+
+            for (var y = p.y; y > 0; y -= Dy) {
+                context.moveTo(p.x, y);
+                context.lineTo(p.x + 20, y);
+                context.stroke();
+
+                context.fillText( parseInt( pxToCm(Yi - y) ), p.x - 25, y);
+
+            }
+
+        }
+
+    </script>
+    <script>
+
+        var b1 = new Bola();
+        var b2 = new Bola();
+        var t = 0, a = .0098;
+        var A, S, T, V;
+
+        $(function () {
+
+            canvas = $('<canvas />').appendTo('body');
+            context = canvas.get(0).getContext('2d');
+
+            canvas.attr('id', 'contexto');
+            canvas.attr('width', '500');
+            canvas.attr('height', '500');
+
+            drawEjes();
+
+            A = $('#A').get(0);
+            S = $('#S').get(0);
+            T = $('#T').get(0);
+            V = $('#V').get(0);
+
+            loadContent();
+
+        });
+
+        var Dt = 1;
+        var play = true;
+        
+        function loadContent() {
+
+            a = new Number(A.value);
+
+            T.value = t = 0;
+            V.value = v = 0;
+            S.value = s = 0;
+
+            b1.init(50, YMax, 10, 'rgb(255, 0, 0)');
+            b1.draw();
+
+            b2.init(100, YMax, 10, 'rgb(215, 0, 235)');
+            b2.draw();
+
+            animate();
+
+        }
+
+        function animate() {
+            if (!play) return;
+            b1.clear();
+            b2.clear();
+            update();
+            b1.draw();
+            b2.draw();
+            to = setTimeout(animate, Dt);
+        }
+
+        function update() {
+            S.value = pxToCm(500 - b1.y);
+            T.value = t;
+            V.value = a * t;
+            A.value = a;
+
+            if (b1.limInf() >= YMax)
+                play = false;
+
+            b1.y = (a * t * t) / 2;
+            b2.y = (a * t * t) / 2;
+            
+            t += Dt;
+            
+        }
+
+        function pxToCm(px) {
+            return 2.54 * px / 96;
+        }
+    </script>
+</head>
+<body>
+s=<input type="text" name="s" id=S /> cm
+t=<input type="text" name="t" id=T /> ms
+v=<input type="text" name="v" id=V /> cm/ms
+a=<input type="text" name="a" value="0.0098" id=A /> cm/ms2
+
+<input type="button" value="parar/continuar" onclick="play=!play;animate();" />
+<input type="button" value="reinicar" onclick="play=false;b1.clear();loadContent();" />
+</body>
+</html>

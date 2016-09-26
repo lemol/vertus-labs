@@ -1,0 +1,140 @@
+
+<html>
+
+<head>
+    <meta charset="utf-8"/>
+    <title>Laboratorio Virtual de Física</title>
+    <link href="site/css/index.css" rel="stylesheet" />
+    <link href="site/css/formulario.css" rel="stylesheet" />
+    <style type="text/css">
+        #contacto_form fieldset {
+            margin: 6px 20px 3px 20px;
+            padding: 15px 0px 15px 70px;
+            font-size: 13px;
+        }
+        #contacto_form input[type=text], #contacto_form select {
+            width: 210px;
+        }
+        #contacto_form div {
+            margin-top: 3px;
+        }
+    </style>
+    <script src="libs/jquery-1.4.1.js" type="text/javascript"></script>
+    <script src="site/script/index.js" type="text/javascript"></script>
+    <script src="site/script/contacto.js" type="text/javascript"></script>
+        
+</head>
+
+<body>
+
+<div id="tudo">
+	<div id="cuerpo">
+		<div id="cabeza">
+			<div class="logo">
+				Laboratorio Virtual de Física</div>
+			<div id="menu-horizontal">
+				<ul class="ul-horizontal">
+					<li><a href="index.html">página inicial</a></li>
+					<li><a href="labs.html">todos laboratorios</a></li>
+					<li><a href="sobre.html">sobre el proyecto</a></li>
+					<li><a href="autores.html">los autores</a></li>
+					<li><a  class="actual" href="contacto.html">hable connosotros</a></li>
+				</ul>
+			</div>
+		</div>
+		<div id="tronco">
+			<div id="pulmao">
+				<div>
+					<form action="registrar.php" method="get" id="registrar_form">
+						<h3>Receber noticias</h3>
+						<fieldset>
+							<!--legend>Receber noticias</legend-->
+							<label for="txt-email-receber">E-mail:</label><input type="text" name="email" id="txt-email-receber"/><input type="submit" value="ok"/>
+						</fieldset>
+					</form>
+				</div>
+				<div>
+					<form action="recomendar.php" method="get">
+						<h3>Recomendar a un amigo</h3>
+						<fieldset>
+							<!--legend>Recomendar</legend-->
+							<label for="txt-nombre-recomendar" style="display:inline-block; width: 80px;">Tu nombre:</label>
+							<input type="text" name="nombre" id="txt-nombre-recomendar"/><br/>
+							<label for="txt-email-receber" style="display:inline-block;width: 80px;">E-mail del amigo:</label>
+							<input type="text" name="email" id="txt-email-recomendar"/><br/>
+							<input type="submit" value="ok" style="margin-left: 90px; padding: 1px 10px"/>
+						</fieldset>
+					</form>
+				</div>
+				<div>
+					<h3>Laboritorios</h3>
+					<ul id="lista">
+						<li><b><i>cargando...</i></b></li>
+					</ul>
+				</div>
+			</div>
+			<div id="coracao">
+				<div>
+                    <? if($sucesso) { ?>
+					<h1>Hable connosotros</h1>
+					<p>Aqui puedes dejar cualquier opinión, sugerencia de laboratórios, critica, etc. Si quieres dejar un feedback sobre algun 
+                       laboratório en particular no lo haga aqui, sino en la página del dicho laboratorio.</p>
+                    <p>También puedes escribir directamente para cualquier correo de nosotros.</p>
+                    
+                    <form id="contacto_form" name="contacto" action="contacto.php" method="post">
+                        <fieldset>
+                        
+                            <div class="label-input">
+                                <label for="contacto_txt_nombre">Nombre:</label>
+                                <input type="text" name="nombre" id="contacto_txt_nombre" />
+                            </div>
+
+                            <div class="label-input">
+                                <label for="contacto_txt_email">E-mail:</label>
+                                <input type="text" name="email" id="contacto_txt_email" />
+                            </div>
+                        
+                            <div class="input-label">
+                                <input type="checkbox" name="registrar" id="contacto_txt_registrar" />
+                                <label for="contacto_txt_registrar">registar e-mail para noticias</label>
+                            </div>
+                        
+                            <div class="label-input">
+                                <label for="contacto_cbx_tipo">Categoria:</label>
+                                <select name="tipo" id="contacto_cbx_tipo">
+                                    <option value=""></option>
+                                    <option value="Profesor">Profesor</option>
+                                    <option value="Estudiante">Estudiante</option>
+                                    <option value="Otro">Otro</option>
+                                </select>
+                            </div>
+                        
+                            <div class="label-textarea">
+                                <label for="contacto_txt_mensaje">Mensaje:</label>
+                                <textarea name="mensaje" id="contacto_txt_mensaje" cols="38" rows="12"></textarea>
+                            </div>
+                        
+                            <div class="controles">
+                                <input type="submit" value="enviar"/>
+                            </div>
+                        
+                        </fieldset>
+                    </form>
+                    
+				</div>
+			</div>
+            <div class="clear"></div>
+		</div>
+	</div>
+	<div id="pernas">
+		<div id="nomes">
+			(c) 2012. <a href="mailto:leza.ml@fecrd.cujae.edu.cu">Leza Morais Lutonda</a>,
+			<a href="mailto:luis.gd@fecrd.cujae.edu.cu">Luis Miguel Gato Díaz</a> 
+			y <a href="mailto:carlos.hm@fecrd.cujae.edu.cu">Carlos José Herrera 
+			Matos</a>. </div>
+	</div>
+</div>
+
+</body>
+
+</html>

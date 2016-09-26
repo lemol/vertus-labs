@@ -1,0 +1,151 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<style>
+		body
+		{
+			margin: 0px;
+		background-color: #ccccee;
+		}
+		canvas
+		{
+			margin: 0px;
+			display: block;
+			border: 1px solid #ccc;
+		}
+	</style>
+	<script src="libs/jquery-1.4.1.js" type="text/javascript"></script>
+</head>
+<body>
+	<input type="button" value="estado" onclick="estado()" style="position: absolute" />
+	<canvas id='myCanvas' height="300" width="300"></canvas>
+	<script>
+
+		var canvas = $('#myCanvas').get(0);
+		var context = canvas.getContext('2d');
+
+
+		/**/
+		// Disena un rectangulo
+
+		context.fillStyle = 'rgb(0, 0, 255)';
+		context.fillRect(5, 5, 290, 290);
+		context.strokeStyle = 'rgb(0, 255, 0)';
+		context.lineWidth = 6;
+		context.strokeRect(4, 4, 292, 292);
+
+
+		// gradiente
+		var gradient = context.createLinearGradient(0, 0, 0, canvas.height); //(xi, yi, xf, yf)
+		gradient.addColorStop(0, '#ff0000');
+		gradient.addColorStop(0.5, '#00ff00');
+		gradient.addColorStop(1, '#0000ff');
+		gradient.addColorStop(0.7, '#000000');
+
+		context.fillStyle = gradient;
+		context.fillRect(0, 0, canvas.width, canvas.height);
+		
+		/*
+		var H = 300,
+			W = 300;
+
+		var xi = 1,
+			yi = 1;
+
+		var cW, cH;
+
+		function windowResize() {
+			var c = $('#myCanvas');
+			c.attr('width', $(window).attr('innerWidth'));
+			c.attr('height', $(window).attr('innerHeight'));
+
+			cW = c.attr('width');
+			cH = c.attr('height');
+		}
+
+		windowResize();
+
+		var x = cW/2,
+			y = cH/2;
+
+		var a = 0;
+		
+		function drawLogo() {
+			context.clearRect(0, 0, cW, cH);
+			// LS
+			context.beginPath();
+			context.arc(x, y, W / 2 - 5, 0, 2 * Math.PI, false);   //context.arc(centerX,centerY,radius,angulo inicial,angulo final:2*Math.PI,false);
+			context.fillStyle = 'rgb(0, 0, 255)';
+			context.fill();
+
+			context.beginPath();
+			context.arc(x, y, W / 2 - 25, 0, 2 * Math.PI, false);
+			context.lineWidth = 12;
+			context.strokeStyle = 'rgb(255, 255, 255)';
+			context.stroke();
+
+			context.font = '80pt "Bauhaus 93"';
+			context.fillStyle = 'rgb(255, 255, 255)';
+			context.fillText('OCR', x - 115, y + 35);
+
+		context.font = '14pt "Verdana"';
+		context.fillText('incomparavel', x-60, y + 70);
+		
+			context.rotate(90* Math.PI/180);
+		}
+		var animando = true;
+		var v = 10;
+		function newV() {
+			v = 1 ;//+ (Math.random() * (30 - 5));
+			document.title = v;
+		}
+
+		function animate() {
+			update();
+			drawLogo();
+			if(!animando)
+				return;
+
+
+
+			//setTimeout(animate, v);
+		}
+
+		function update() {
+
+
+			if (x - W / 2 + xi < - 8 || x + W / 2 + xi > cW + 8) {
+				xi *= -1;
+				v = newV();
+			}
+
+			if (y - H / 2 + yi < -8 || y + H / 2 + yi > cH + 8) {
+				yi *= -1;
+				v = newV();
+			}
+
+			x += xi;
+			y += yi;
+
+
+		}
+
+		function estado() {
+		   if(animando){
+			animando = false;
+
+		   }
+		   else{
+			animando = true;
+			animate();
+		   }            
+		}
+
+		$(window).resize(windowResize);
+	   // animate();
+		
+		*/
+	</script>
+</body>
+</html>

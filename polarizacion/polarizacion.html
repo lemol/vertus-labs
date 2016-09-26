@@ -1,0 +1,444 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title>Polarizacion</title>
+	<link href="../css/global.css" rel="stylesheet" />
+    <link href="../css/controlui.css" rel="stylesheet" type="text/css" />
+	<script src="../libs/jquery-1.4.1.js" type="text/javascript"></script>
+    <!-- jQuery.UI -->
+    <link type="text/css" href="../css/jquery.ui.all.css" rel="stylesheet" />
+    <script type="text/javascript" src="../libs/jquery.ui.core.js"></script>
+	<script type="text/javascript" src="../libs/jquery.ui.widget.js"></script>
+	<script type="text/javascript" src="../libs/jquery.ui.mouse.js"></script>
+	<script type="text/javascript" src="../libs/jquery.ui.slider.js"></script>
+    <!-- end jQuery.UI -->
+	<script src="../libs/rx.js" type="text/javascript"></script>
+	<script src="../libs/rx.jQuery.js" type="text/javascript"></script>
+	<script src="../scripts/utilidades.js" type="text/javascript"></script>
+	<script src="../scripts/lsjo.js" type="text/javascript"></script>
+	<script src="../scripts/gaal.js" type="text/javascript"></script>
+	<script src="../scripts/utilidades.js" type="text/javascript"></script>
+	<script src="../scripts/cinematica.js" type="text/javascript"></script>
+	<script src="../scripts/ui.js" type="text/javascript"></script>
+	<script src="../scripts/materiales.js" type="text/javascript"></script>
+	<script src="../scripts/unidades.js" type="text/javascript"></script>
+	<script src="../scripts/color-helper.js" type="text/javascript"></script>
+    <script src="../scripts/native-js-helper.js" type="text/javascript"></script>
+    <script src="../scripts/canvas-2d-context-helper.js" type="text/javascript"></script>
+    <script src="../scripts/eventui.js" type="text/javascript"></script>
+    <script src="../scripts/jquery-helper.js" type="text/javascript"></script>
+    <script src="../scripts/controlui.js" type="text/javascript"></script>
+	<script src="polarizacion.js" type="text/javascript"></script>
+    <script src="lamina.js" type="text/javascript"></script>
+    <script src="pantalla.js" type="text/javascript"></script>
+    <script src="graficas.js" type="text/javascript"></script>
+    
+    
+	<script type="text/javascript">
+
+	    var escena;
+	    var ctx;
+	    var drawer;
+	    var sis;
+	    var eventHandler;
+	    var cola;
+	    var animationHandler;
+        var grafica;
+	    
+	    $(function () {
+	        escena = $('#cnt');
+	        ctx = escena.get(0).getContext('2d');
+
+	        drawer = new Drawer();
+	        sis = new Sistema(new Vector(0, 0), new Vector(0, 250));
+	        eventHandler = new EventUI(escena, true);
+	        cola = new Cola();
+            grafica = new Grafica(300, 135);
+
+	        ctx.lineWidth = 1;
+	        ctx.strokeStyle = "white";
+
+            var rayaCentral = {
+                draw: function(ctx) {
+
+                    var x = sis.toCanvasX(0);
+                    var y = sis.toCanvasY(0);
+
+                    ctx.save();
+                    ctx.strokeStyle = 'rgba(125,125,125, 0.5)';
+                    ctx.lineWidth = 1;
+                    ctx.moveTo(x, y);
+                    ctx.lineTo(x + 1000, y);
+                    ctx.stroke();
+                    ctx.restore();
+                }
+            };
+
+            drawer.addObj(grafica);
+            drawer.addObj(rayaCentral);
+
+            var pantalla = new Pantalla();
+
+            drawer.addObj(pantalla);
+
+	        drawer.drawAll(ctx, true);
+
+
+	        animationHandler = startAnimation(function () {
+	            
+	            writeValoresPolarizadorActual();
+	            drawer.drawAll(ctx, true);
+	            
+	        });
+
+	    });
+        
+	</script>
+	<script type="text/javascript">
+
+        var polH = 60;
+        var intensidadMaxima = 100;
+
+	    $(function () {
+
+	        $('#mn_NuevoPolarizador [name=btnOk]').click(btnOkClick);
+	        $('#frmPolarizador').submit(setValoresPolarizadorActual);
+            $('#sliderIntensidadLuzIncidente').slider({
+                min: 0,
+                max: 100,
+                value: 50,
+                slide: function(e, yo) {
+                    $('#txtIntensidadLuzIncidente').val(yo.value);
+                    frmLuzIncidenteSubmit();
+                }
+            });
+            $('#sliderAnguloLuzIncidente').slider({
+                min: -360,
+                max: 360,
+                value: 0,
+                slide: function(e, yo) {
+                    $('#txtAnguloLuzIncidente').val(yo.value);
+                    frmLuzIncidenteSubmit();
+                }
+            });
+
+            var txtIntensidadLuzIncidenteKeyUp = $('#txtIntensidadLuzIncidente').toObservable('keyup');
+            txtIntensidadLuzIncidenteKeyUp.Subscribe(function(){
+
+                var intensidad = Number($('#txtIntensidadLuzIncidente').val());
+
+                if( intensidad > intensidadMaxima ) {
+                    intensidad = intensidadMaxima;
+                }
+                else if( isNaN(intensidad) || intensidad < 0 ) {
+                    intensidad = 0;
+                }
+
+                $('#txtIntensidadLuzIncidente').val(intensidad);
+
+                $('#sliderIntensidadLuzIncidente').slider('value', intensidad);
+                frmLuzIncidenteSubmit();
+            });
+
+            var txtAnguloLuzIncidenteKeyUp = $('#txtAnguloLuzIncidente').toObservable('keyup');
+            txtAnguloLuzIncidenteKeyUp.Subscribe(function(){
+
+                var angulo = Number($('#txtAnguloLuzIncidente').val());
+
+                if( isNaN( angulo ) ) {
+                    angulo = 0;
+                }
+                else if( angulo > 360 ) {
+                    angulo = angulo % 360;
+                }
+
+                $('#txtAnguloLuzIncidente').val(angulo);
+                
+                $('#sliderAnguloLuzIncidente').slider('value', angulo);
+                frmLuzIncidenteSubmit();
+
+            });
+
+
+	    });
+
+	    function btnOkClick() {
+
+	        var cita = grado90ToRadiano(Number($('#txt_anguloNP').val()));
+
+	        var pol = new Polarizador(cita, sis.newVector(0, 0), 40, polH, 10);
+	        cola.addObj(pol, true);
+	        eventHandler.addDragable(pol, true);
+	        drawer.addObj(pol);
+
+	    }
+
+	    function setValoresPolarizadorActual() {
+
+	        if (cola.selecionado !== null) {
+	            var cita = grado90ToRadiano(Number($('#txt_anguloP').val()));
+
+	            cola.selecionado.setAngulo(cita);
+	        }
+
+	    }
+
+	    function writeValoresPolarizadorActual(forzar) {
+
+	        if ((cola.selecionado !== null && cola.selecionado.girando) || forzar) {
+	            var cita = redondear(radianoToGrado90(cola.selecionado.angulo), 2);
+
+	            $('#txt_anguloP').val(cita);
+	        }
+
+	    }
+	    
+	</script>
+    <script type="text/javascript">
+
+	    function frmLuzIncidenteValidate() {
+	        var form = $('#frmLuzIncidente');
+
+	        var intensidad = Number($('#txtIntensidadLuzIncidente').attr('value'));
+
+	        if (isNaN(intensidad) || intensidad < 0) {
+	            return Invalido("La intensidad debe ser un número positivo.");
+	        }
+
+            if (intensidad > intensidadMaxima) {
+                return Invalido();
+            }
+
+	        return Valido();
+	    }
+
+	    function frmLuzIncidenteSubmit(e) {
+	        e && e.preventDefault();
+
+	        var validacion = frmLuzIncidenteValidate();
+
+	        if (!validacion.isValido) {
+	            showError(validacion.msg);
+	            return;
+	        }
+
+	        var form = $('#frmLuzIncidente');
+	        var tipo = TipoLuz.parse($('#cbxTipoLuzIncidente').attr('value'));
+	        var intensidad = Number($('#txtIntensidadLuzIncidente').attr('value')) * polH / intensidadMaxima ;
+
+	        var luz;
+	        var luzFactory = new LuzFactory();
+	        var pos = sis.newVector(50, 0);
+
+	        luzFactory.addArg('intensidad', intensidad);
+	        luzFactory.addArg('pos', pos);
+
+            if (tipo == TipoLuz.Lineal) {
+
+                var angulo = Number($('#txtAnguloLuzIncidente').attr('value'));
+
+                if (isNaN(angulo)) {
+                    $('#txtAnguloLuzIncidente').attr('value', 0);
+                    angulo = 0;
+                }
+
+                angulo = grado90ToRadiano(angulo);
+
+                luzFactory.addArg('angulo', angulo);
+
+	        }
+
+            luz = luzFactory.getLuz(tipo);
+	        cola.setLuzIn(luz);
+	        cola.polarizar();
+
+        }
+
+	    function cbxTipoLuzIncidenteChange() {
+            
+	        var tipo = TipoLuz.parse($('#cbxTipoLuzIncidente').attr('value'));
+	        var txtAngulo = $('#txtAnguloLuzIncidente').parent();
+
+	        if (tipo === TipoLuz.Lineal) {
+	            txtAngulo.show('slow');
+	        }
+	        else {
+	            txtAngulo.hide('slow');
+	        }
+
+	        if (frmLuzIncidenteValidate().isValido)
+	            frmLuzIncidenteSubmit();
+
+	    }
+
+	    $(function () {
+
+	        $('#cbxTipoLuzIncidente').change(cbxTipoLuzIncidenteChange);
+	        $('#frmLuzIncidente').submit(frmLuzIncidenteSubmit);
+
+	        $('form').submit(function (e) {
+	            e.preventDefault();
+	        });
+
+	        cbxTipoLuzIncidenteChange();
+	    });
+
+    </script>
+    <script type="text/javascript">
+        
+	    $(function () {
+
+	        var frmNuevaLamina = $('#frmNuevaLamina');
+	        frmNuevaLamina.submit(frmNuevaLaminaSubmit);
+
+	    });
+
+	    function frmNuevaLaminaSubmit(e) {
+	        e.preventDefault();
+
+	        var angulo = grado90ToRadiano(Number($('#txt_anguloNL').val()));
+	        var dn = Number($('#txt_dnNL').val());
+	        var ancho = mmToPixel(Number($('#txt_anchoNL').val()));
+	        var tipo = TipoLamina[$('#cbo_tipoNL').val()];
+
+	        var lam = new Lamina(ancho, dn, angulo, sis.newVector(0, 0), 20, 40, tipo);
+	        cola.addObj(lam, true);
+	        eventHandler.addDragable(lam, true);
+	        drawer.addObj(lam);
+
+	    }
+
+    </script>
+    <script>
+
+        $(function(){
+
+            $('.opcion [name=btnOcultar]').click(function(){
+                cola.removeSelected();
+            });
+
+            var helper = $('#opcion_Polarizador [name=helper]');
+
+            helper.keyup(function(e){
+                
+                switch(e.keyCode) {
+                    case 46:
+                        cola.removeSelected();
+                        break;
+                }
+
+            });
+
+            var anguloKeyUp = $('#frmPolarizador [name=angulo]').toObservable('keyup');
+            
+            anguloKeyUp.Subscribe(setValoresPolarizadorActual);
+            
+
+        });
+
+    </script>
+</head>
+<body id="principal">
+
+		<div class="menu-bar" ><ul>
+            <li id="mn_Luz"><form id="frmLuzIncidente" action="#">
+				<div class="menu-item">
+					<a href="#">Luz Incidente</a>
+				</div>				
+				<div class="menu-controls">
+					<!--input type="submit" name="btnOk" value="ok" /-->
+					<input type="button" name="btnOcultar" value="ocultar" />
+				</div>
+				<div class="menu-content">
+					<fieldset>
+						<div class="div-lineal">
+                            <select name="cbxTipoLuzIncidente" id="cbxTipoLuzIncidente">
+                                <optgroup label="Tipo de Luz">
+                                    <option value="NATURAL">Natural</option>
+                                    <option value="LINEAL">Lineal</option>
+                                    <option value="CIRCULAR">Circular</option>
+                                    <option value="ELIPTICA">Eliptica</option>
+                                </optgroup>
+                            </select>
+                        </div>
+                        <div class="div-lineal">
+                            <label for="txtIntensidadLuzIncidente">intensidad:</label>
+                            <input type="text" name="intensidad" id="txtIntensidadLuzIncidente" value="45" >
+                            <div id="sliderIntensidadLuzIncidente"></div>
+                        </div>
+                        <div class="div-lineal" style="display: none">
+                            <label for="anguloLuzIncidente">ángulo:</label>
+                            <input type="text" name="angulo" id="txtAnguloLuzIncidente" value="0" />
+                            <div id="sliderAnguloLuzIncidente"></div>
+                        </div>
+					</fieldset>
+				</div>
+			</form></li>
+            <li id="mn_NuevoPolarizador"><form id="frmNuevoPolarizador" action="#">
+				<div class="menu-item">
+					<a href="#">Insertar polarizador</a>
+				</div>				
+				<div class="menu-controls">
+					<input type="submit" name="btnOk" value="insertar" />
+					<input type="button" name="btnOcultar" value="ocultar" />
+				</div>
+				<div class="menu-content">
+					<fieldset>
+						<!--legend>Nuevo Polarizador</legend-->
+						<div class="div-lineal">
+							<label for="txt_anguloNP">angulo (grado)=</label> 
+							<input type="text" name="txt_anguloNP" id="txt_anguloNP" value="0" />
+						</div>
+					</fieldset>
+				</div>
+			</form></li>
+            <li id="mn_NuevaLamina"><form id="frmNuevaLamina" action="#">
+				<div class="menu-item">
+					<a href="#">Insertar lámina</a>
+				</div>				
+				<div class="menu-controls">
+					<input type="submit" name="btnOk" value="insertar" />
+					<input type="button" name="btnOcultar" value="ocultar" />
+				</div>
+				<div class="menu-content">
+					<fieldset>
+						<!--legend>Nuevo Polarizador</legend-->
+                        <div class="div-lineal">
+                            <label for="cbo_tipoNL">tipo de lámina:</label>
+							<select name="cbo_tipoNL" id="cbo_tipoNL">
+                                <option value="UnaOnda">Una Onda</option>
+                                <option value="MediaOnda">Media Onda</option>
+                                <option value="QuartoDeOnda">Un quarto de Onda</option>
+                            </select>
+						</div>
+                        
+					</fieldset>
+				</div>
+			</form></li>
+		</ul></div>
+		
+		<div id="escena">
+            <canvas id="cnt" width="1000" height="500"></canvas>
+		</div>
+		
+    <div id="opcion_Polarizador" class="opcion">
+        <form id="frmPolarizador" action="#">
+			<div class="menu-content">
+                <input type="text" name="helper" style="width: 0px; height: 0px;"/>
+				<fieldset>
+					<legend>polarizador</legend>
+					<div class="div-lineal">
+						<label for="txt_anguloP">angulo (grado):</label> 
+						<input type="text" name="angulo" id="txt_anguloP" />
+					</div>
+				</fieldset>
+			</div>	
+			<div class="menu-controls">
+				<input type="button" name="btnOcultar" value="ocultar" />
+			</div>
+		</form>
+    </div>
+
+</body>
+</html>

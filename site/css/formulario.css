@@ -1,0 +1,27 @@
+body {
+}
+
+.label-input {
+}
+
+.label-input label {
+    display: inline-block;
+    width: 64px;
+    vertical-align: middle;
+    font-weight: bold;
+}
+
+.label-textarea label {
+    display: inline-block;
+    width: 64px;
+    vertical-align: top;
+    font-weight: bold;
+}
+
+.input-label input {
+    margin-left: 74px;
+}
+
+.controles{
+    margin-left: 87px;
+}

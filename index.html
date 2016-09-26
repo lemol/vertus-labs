@@ -1,0 +1,154 @@
+<html>
+
+<head>
+    <meta charset="utf-8"/>
+    <title>Laboratorio Virtual de Física</title>
+    <link href="site/css/index.css" rel="stylesheet" />
+    <script src="libs/jquery-1.4.1.js" type="text/javascript"></script>
+    <script src="site/script/index.js" type="text/javascript"></script>
+    <script src="site/script/contacto.js" type="text/javascript"></script>
+</head>
+
+<body>
+
+<div id="tudo">
+	<div id="cuerpo">
+		<div id="cabeza">
+			<div class="logo">
+				Laboratorio Virtual de Física</div>
+			<div id="menu-horizontal">
+				<ul class="ul-horizontal">
+					<li><a class="actual" href="index.html">página inicial</a></li>
+					<li><a href="labs.html">todos laboratorios</a></li>
+					<li><a href="sobre.html">sobre el proyecto</a></li>
+					<li><a href="autores.html">los autores</a></li>
+					<li><a href="contacto.html">hable connosotros</a></li>
+				</ul>
+			</div>
+		</div>
+		<div id="tronco">
+			<div id="pulmao">
+				<div>
+					<form action="registrar.php" method="get" id="registrar_form">
+						<h3>Receber noticias</h3>
+						<fieldset>
+							<!--legend>Receber noticias</legend-->
+							<label for="txt-email-receber">E-mail:</label><input type="text" name="email" id="txt-email-receber"/><input type="submit" value="ok"/>
+						</fieldset>
+					</form>
+				</div>
+				<div>
+					<form action="recomendar.php" method="get">
+						<h3>Recomendar a un amigo</h3>
+						<fieldset>
+							<!--legend>Recomendar</legend-->
+							<label for="txt-nombre-recomendar" style="display:inline-block; width: 80px;">Tu nombre:</label>
+							<input type="text" name="nombre" id="txt-nombre-recomendar"/><br/>
+							<label for="txt-email-receber" style="display:inline-block;width: 80px;">E-mail del amigo:</label>
+							<input type="text" name="email" id="txt-email-recomendar"/><br/>
+							<input type="submit" value="ok" style="margin-left: 90px; padding: 1px 10px"/>
+						</fieldset>
+					</form>
+				</div>
+				<div>
+					<h3>Laboritorios</h3>
+					<ul id="lista">
+						<li><b><i>cargando...</i></b></li>
+					</ul>
+				</div>
+			</div>
+			<div id="coracao">
+				<div>
+					<a name="sobre"></a>
+					<h1>Sobre</h1>
+					<p>Asere chamacos y chamacas, que vola?</p>
+					<p>Este es un proyecto blablabla que consiste en la creación 
+					de laboratorios virtuales de física con tecnologías web independiente 
+					de plataforma blablabbalba pingas y mierdas blablabba.</p>
+					<p>El proyecto es el primer de su naturaleza blablabla siendo 
+					desarrollado en Cuba, y tiene como objectivos fundamentales 
+					blablalbalba con cojones apoyar a la pinga de los estudiantes 
+					y atender a la demanda (que es eso?) de los profesores para 
+					desarollo de laboratorios particulares de mierda.</p>
+					<p>En este espacio pretendemos receber su feedback sobre el 
+					adamiento del proyecto. Para eso estamos disponibilizando las 
+					versiones en desarrollo de los laboratorios blajdfshuahsuAHSU 
+					esperando cualquier opinion, critica, sugerencia y cualquier 
+					mierda que quierais por eso no te olvides de registrar tu correo 
+					de mierda para recebir noticias sobre el andamiento del proyecto 
+					coño.</p>
+					<p>Nosotros somos los tipos blabalba: Leza Morais Lutonda(más 
+					o menos), Luis Miguel Gato(escapado) y Carlos José Herrera (tipo 
+					de 5), estudiantes de Telecomunicaciones y Electrónica en el 
+					Istituto Superior Poliblablablbaa (cujae)</p>
+					<p>Es todo en esta parte, nos vamos echando!</p>
+				</div>
+				<div>
+					<a title="requisitos"></a>
+					<h1>Requisitos</h1>
+					<p>Estos laboratorios son de talla (que es eso?) así que solo 
+					necesitan de un dispositivo con algun navegador moderno. No 
+					se necesita ningun plugin ni nada.</p>
+					<p>Aquí está la lista de algunos navegadores soportados.</p>
+					<div style="text-align:center">
+					<table class="tabela-1" align="center">
+						<thead>
+							<tr>
+								<th>Navegador</th>
+								<th>Version</th>
+								<th>Descarga</th>
+							</tr>
+						</thead>
+						<tr>
+							<td><img src="site/img/firefox-logo.png" alt="Firefox" /><br/>
+							    Mozilla Firefox</td>
+							<td>3.5 o Superior</td>
+							<td><a href="http://blabblaba.com">http://blabblaba.com</a></td>
+						</tr>
+						<tr>
+							<td><img src="site/img/chrome-logo.png" alt="Chrome" /><br/>
+							    Google Chrome</td>
+							<td>4.0 o Superior</td>
+							<td><a href="http://blabblaba.com">http://blabblaba.com</a></td>
+						</tr>
+						<tr>
+							<td><img src="site/img/ie-logo.png" alt="IE" /><br/>
+							    Microsoft Internet Explorer</td>
+							<td>9.0 o Superior</td>
+							<td><a href="http://blabblaba.com">http://blabblaba.com</a></td>
+						</tr>
+						<tr>
+							<td><img src="site/img/opera-logo.png" alt="Opera" /><br/>
+							    Opera</td>
+							<td>10.0 o Superior</td>
+							<td><a href="http://blabblaba.com">http://blabblaba.com</a></td>
+						</tr>
+						<tr>
+							<td><img src="site/img/safari-logo.png" alt="Safari" /><br/>
+							    Safari</td>
+							<td>4.0 o Superior</td>
+							<td><a href="http://blabblaba.com">http://blabblaba.com</a></td>
+						</tr>
+					</table>
+					</div>
+					<p>Cualquier navegador basado en esos y más algunas mierdas también son soportados.</p>
+					<p>Si quieres soporte a otros navegadores entra en contacto connosotros. Pero ya estamos 
+					avisando que si quieres algo para Internet Explorer inferior a 9 entoces vete para la pinga
+					que no hay aqui no hay coño para eso.</p>
+				</div>
+			</div>
+            <div class="clear"></div>
+		</div>
+	</div>
+	<div id="pernas">
+		<div id="nomes">
+			(c) 2012. <a href="mailto:leza.ml@fecrd.cujae.edu.cu">Leza Morais Lutonda</a>,
+			<a href="mailto:luis.gd@fecrd.cujae.edu.cu">Luis Miguel Gato Díaz</a> 
+			y <a href="mailto:carlos.hm@fecrd.cujae.edu.cu">Carlos José Herrera 
+			Matos</a>. </div>
+	</div>
+</div>
+
+</body>
+
+</html>

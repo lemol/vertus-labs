@@ -1,0 +1,48 @@
+[
+
+    {
+        "alias": "gravedad",
+        "nombre": "Gravedad",
+        "version": "0.0.1",
+        "descripcion": "Blablaba de la gravedad en cualquier mierda del universo que vive aqui por eso conojor",
+        "tags": ["fisica", "cinematica"],
+        "modificado": ""
+    },
+
+    {
+        "alias": "mru-1",
+        "nombre": "Movimiento Rectilineo",
+        "version": "0.0.1",
+        "descripcion": "Eso es movimiento rectileinao owiste",
+        "tags": ["fisica", "cinematica"],
+        "modificado": ""
+    },
+    
+    {
+        "alias": "tubo-rayos-catodicos",
+        "nombre": "Tubo de Rayos Catódicos",
+        "version": "0.1.34",
+        "descripcion": "Merda de rayos catodicos por isso esu gosto porra nenhuma dessa merda que estou escrevendo aqui nesse mambu oviste burro de merda.",
+        "tags": ["fisica", "cinematica", "TER"],
+        "modificado": ""
+    },
+    
+    {
+        "alias": "difraccion-1",
+        "nombre": "Difracción",
+        "version": "0.0.123",
+        "descripcion": "Essa difracion e uma porra que nao tem mais como fazer as coisas por isso ficou assim!",
+        "tags": ["fisica", "optica"],
+        "modificado": ""
+    },
+    
+    {
+        "alias": "polarizacion",
+        "nombre": "Polarización",
+        "version": "0.2.32",
+        "descripcion": "Vai mais ]e polarizar esse gajo que sempre está aos meus p;es sem malandro de meia tigela!",
+        "tags": ["fisica", "optica"],
+        "modificado": ""
+    }
+
+]

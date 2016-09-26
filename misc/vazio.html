@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Vazio</title>
+    <style>
+        body
+        {
+            margin: 0px;
+        }
+        canvas
+        {
+            margin: 0px;
+            display: block;
+            border: 1px solid #ccc;
+        }
+    </style>
+    <script src="libs/jquery-1.4.1-vsdoc.js" type="text/javascript"></script>
+	<script>
+		var canvas,
+			ctx, middleX, middleY;
+			
+		function drawHappyFace1(ctx, scaleFactor)
+		{      
+		  ctx.lineWidth = 2; 
+		  ctx.strokeStyle = "#000000";
+		  ctx.fillStyle = "#000000";
+		  ctx.beginPath(); 
+		  ctx.arc(0.0, 0.0, 1 * 0.25 * scaleFactor, 0, Math.PI, false);
+		  ctx.stroke();
+		}
+        
+        function drawFace(scaleFactor)
+        {
+            // save the current transposition matrix
+            ctx.save();
+            
+            // move origo to the middle of the blob 
+            ctx.translate(middleX, middleY); 
+                
+            // rotate everything draw from here on any degrees 
+            ang = -0.25 * Math.PI; //figureOutBlobRotation();
+            ctx.rotate(ang);  
+                
+            // draw the happy face number one 
+            drawHappyFace1(ctx, scaleFactor); 
+                
+            // make everything go back to the point as it was
+            // when calling save
+            ctx.restore(); 
+        }
+		$(function(){
+		    canvas = $('#ctx');
+			ctx = canvas.get(0).getContext('2d');
+			
+            middleX = middleY = 60;
+			drawFace(50);
+            
+            middleX = middleY = 120;
+            drawFace(50);
+		});
+	</script>
+</head>
+<body>
+    <canvas id="ctx" width="500" height="500" />
+</body>
+</html>

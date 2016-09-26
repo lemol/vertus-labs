@@ -1,0 +1,437 @@
+﻿<!DOCTYPE html>
+
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>Difraccion</title>
+		<link href="../css/global.css" rel="stylesheet" />
+        <link href="../css/controlui.css" rel="stylesheet" type="text/css" />
+		<style type="text/css">
+			.menu-bar > ul > li .menu-content
+			{
+				font-size: 14px;
+				color: #ffffff;
+				min-width: 170px;
+			}
+			#mn_Parametros > .menu-content label
+			{
+				width: 25px;
+				display: inline-block;
+			}
+			#mn_Parametros > .menu-content input[type=text]
+			{
+				width: 70px;
+			}
+            #tabela-funciones
+            {
+                text-align: center;
+            }
+		</style>
+		<script src="../libs/jquery-1.4.1.js" type="text/javascript"></script>
+		<script src="../libs/rx.js" type="text/javascript"></script>
+		<script src="../libs/rx.jQuery.js" type="text/javascript"></script>
+		<script src="../scripts/utilidades.js" type="text/javascript"></script>
+		<script src="../scripts/lsjo.js" type="text/javascript"></script>
+		<script src="../scripts/gaal.js" type="text/javascript"></script>
+		<script src="../scripts/utilidades.js" type="text/javascript"></script>
+		<script src="../scripts/cinematica.js" type="text/javascript"></script>
+		<script src="../scripts/ui.js" type="text/javascript"></script>
+		<script src="../scripts/materiales.js" type="text/javascript"></script>
+		<script src="../scripts/unidades.js" type="text/javascript"></script>
+		<script src="../scripts/color-helper.js" type="text/javascript"></script>
+		<script src="difraccion-1.js" type="text/javascript"></script>
+        <script src="../scripts/jquery-helper.js" type="text/javascript"></script>
+        <script src="../scripts/controlui.js" type="text/javascript"></script>
+		<script type="text/javascript">
+
+			function setEventos() {
+
+			    var txtNKeyUp = $('#txt_N').toObservable('keyup');
+			    var txtbKeyUp = $('#txt_b').toObservable('keyup');
+			    var txtdKeyUp = $('#txt_d').toObservable('keyup');
+			    var txt_lambdaKeyUp = $('#txt_lambda').toObservable('keyup');
+			    var txtLKeyUp = $('#txt_L').toObservable('keyup');
+
+				txtNKeyUp.Subscribe(function (keyInfo) {
+
+				    var N = Number($('#txt_N').get(0).value);
+				    if (isNaN(N) || N < 1 || !isInt(N)) {
+
+				        return {
+				            isValido: false,
+				            mensagem: 'El valor del número de rendijas tiene que ser un entero mayor que 1.'
+				        }
+
+				    }
+
+				    if (N == 1) {
+				        $('#txt_d').get(0).value = 0;
+				        $('#txt_d').get(0).disabled = true;
+
+				        $('#chk_verInterferencia').get(0).disabled = true;
+				        $('#chk_verDifraccion').get(0).disabled = true;
+
+				        $('#opt_patronInterferencia').get(0).disabled = true;
+				        $('#opt_patronDifraccion').get(0).disabled = true;
+
+				        $('#chk_verModulacion').get(0).checked = true;
+				        $('#opt_patronModulacion').get(0).checked = true;
+				    }
+				    else {
+				        $('#txt_d').get(0).disabled = false;
+
+				        $('#chk_verInterferencia').get(0).disabled = false;
+				        $('#chk_verDifraccion').get(0).disabled = false;
+				        $('#chk_verModulacion').get(0).disabled = false;
+
+				        $('#opt_patronInterferencia').get(0).disabled = false;
+				        $('#opt_patronDifraccion').get(0).disabled = false;
+
+				        var b = Number($('#txt_b').get(0).value);
+				        d = Number($('#txt_d').get(0).value);
+
+				        if (d == 0)
+				            $('#txt_d').get(0).value = b * 5;
+
+				    }
+
+				    btnRecargarClick();
+
+				});
+
+				txt_lambdaKeyUp.Subscribe(function (keyInfo) {
+
+				    var lambda = Number($('#txt_lambda').get(0).value);
+
+				    if (isNaN(lambda) || lambda < 390 || lambda > 710) {
+				        return {
+				            isValido: false,
+				            mensagem: 'El valor de la longitud de onda tiene que ser un número que corresponda al espectro visible.'
+				        }
+				    }
+
+				    btnRecargarClick();
+				});
+
+			}
+
+		</script>
+		<script>
+
+			var escena;
+			var configs = {
+				interferencia: {
+					ver: false,
+					color: '#ffa4de'
+				},
+				difraccion: {
+					ver: true,
+					color: '#9edcf1'
+				},
+				modulacion: {
+					ver: true,
+					color: '#c2f8a7'
+				},
+				patron: {
+					funcion: Funcion.DIFRACCION,
+					width: 30
+				},
+				lineWidth: 2
+			};
+			var params = {
+				N: 2,
+				b: microToPixel(2),
+				d: microToPixel(10),
+				L: mmToPixel(150),
+				lambda: nmToPixel(650)
+			};
+
+			function getContext(elementoCanvas) {
+				return elementoCanvas.getContext('2d');
+			}
+
+			function cargar(ctx) {
+
+				showValoresParametros();
+				showConfigs();
+				ctx.clearRect(0, 0, 1000, 500);
+				plotTodo(ctx, params.N, params.b, params.d, params.L, params.lambda, configs);
+
+			}
+			function redefinir(ctx) {
+				lerParametros();
+				lerConfigs();
+				ctx.clearRect(0, 0, 1000, 500);
+				plotTodo(ctx, params.N, params.b, params.d, params.L, params.lambda, configs);
+			}
+
+			function showValoresParametros() {
+				$('#txt_N').get(0).value = params.N;
+				$('#txt_b').get(0).value = pixelToMicro(params.b).toFixed();
+				$('#txt_d').get(0).value = pixelToMicro(params.d).toFixed();
+				$('#txt_lambda').get(0).value = pixelToNm(params.lambda).toFixed();
+				$('#txt_L').get(0).value = pixelToMm(params.L).toFixed();
+			}
+			function lerParametros() {
+
+				var validacion;
+
+				(validacion = validarParametros()) && !validacion.isValido && !alert(validacion.mensagem) || (function () {
+					params.N = Number($('#txt_N').get(0).value);
+
+					if (params.N == 1) {
+						$('#txt_d').get(0).value = 0;
+						$('#txt_d').get(0).disabled = true;
+
+						$('#chk_verInterferencia').get(0).disabled = true;
+						$('#chk_verDifraccion').get(0).disabled = true;
+						$('#chk_verModulacion').get(0).checked = true;
+
+					}
+
+					params.b = microToPixel(Number($('#txt_b').get(0).value));
+					params.d = microToPixel(Number($('#txt_d').get(0).value));
+					params.lambda = nmToPixel(Number($('#txt_lambda').get(0).value));
+					params.L = mmToPixel(Number($('#txt_L').get(0).value));
+				})();
+
+			}
+			function showConfigs() {
+				$('#chk_verInterferencia').attr('checked', configs.interferencia.ver);
+				$('#chk_verDifraccion').attr('checked', configs.difraccion.ver);
+				$('#chk_verModulacion').attr('checked', configs.modulacion.ver);
+
+				$('#opt_patronInterferencia').attr('checked', configs.patron.funcion === Funcion.INTERFERENCIA);
+				$('#opt_patronDifraccion').attr('checked', configs.patron.funcion === Funcion.DIFRACCION);
+				$('#opt_patronModulacion').attr('checked', configs.patron.funcion === Funcion.MODULACION);
+
+			}
+			function lerConfigs() {
+				chkVerInterferenciaChange();
+				chkVerDifraccionChange();
+				chkVerModulacionChange();
+
+				optFuncionPatronChange();
+			}
+			function chkVerInterferenciaChange() {
+				var yo = $('#chk_verInterferencia');
+				configs.interferencia.ver = !!yo.attr('checked');
+			}
+			function chkVerDifraccionChange() {
+				var yo = $('#chk_verDifraccion');
+				configs.difraccion.ver = !!yo.attr('checked');
+			}
+			function chkVerModulacionChange() {
+				var yo = $('#chk_verModulacion');
+				configs.modulacion.ver = !!yo.attr('checked');
+			}
+			function optFuncionPatronChange() {
+				$('[name=opt_functionPatron]').each(function () {
+
+					if ($(this).attr('checked')) {
+						configs.patron.funcion = Funcion[$(this).attr('value')];
+						return;
+					}
+
+				});
+			}
+			function btnRecargarClick() {
+				redefinir(getContext(escena.get(0)));
+			}
+			function escenaResize(canvas) {
+
+				var w = canvas.width, h = canvas.height;
+				configs.sis = { oriX: w - configs.patron.width, oriY: h / 2 };
+
+			}
+
+			function validarParametros() {
+
+				var N = Number($('#txt_N').attr('value'));
+
+				if (isNaN(N) || N < 1 || !isInt(N)) {
+
+					return {
+						isValido: false,
+						mensagem: 'El valor del número de rendijas tiene que ser un entero mayor que 1.'
+					}
+
+				}
+
+				var b = Number($('#txt_b').attr('value')),
+					d = Number($('#txt_d').attr('value'));
+
+				if (isNaN(b) || b <= 0) {
+					return {
+						isValido: false,
+						mensagem: 'El valor de "b" tiene que ser un numero positivo.'
+					}
+				}
+				if (isNaN(d) || (d <= 0 && N != 1)) {
+					return {
+						isValido: false,
+						mensagem: 'El valor de "d" tiene que ser un numero positivo.'
+					}
+				}
+				if (b > d  && N != 1) {
+					return {
+						isValido: false,
+						mensagem: 'No tiene sentido que b > d. Verifique.'
+					}
+				}
+
+				var lambda = Number($('#txt_lambda').attr('value'));
+
+			    if (isNaN(lambda) || lambda < 390 || lambda > 710) {
+			        return {
+			            isValido: false,
+			            mensagem: 'El valor de la λ tiene que ser un número correspondiente al espectro visible.\n' +
+                                  'entre 390 y 710'
+			        }
+				}
+
+				var L = Number($('#txt_L').attr('value'));
+				if (isNaN(L) || L <= 0) {
+					return {
+						isValido: false,
+						mensagem: 'El valor de L tiene que ser un numero positivo.'
+					}
+				}
+
+				return {
+					isValido: true
+				};
+
+			}
+
+			$(function () {
+
+				escena = $('#cnt');
+
+				$('#btn_recargar').click(btnRecargarClick);
+				$('#chk_verInterferencia').change(btnRecargarClick);
+				$('#chk_verDifraccion').change(btnRecargarClick);
+				$('#chk_verModulacion').change(btnRecargarClick);
+
+				$('[name=opt_functionPatron]').change(btnRecargarClick);
+
+				$('#mn_Parametros input[name=btnOk]').click(btnRecargarClick);
+
+				$('#menu-bar input[type=text]').attr('autocomplete', 'off');
+
+				setEventos();
+
+				escenaResize(escena.get(0));
+				cargar(getContext(escena.get(0)));
+
+			});
+
+		</script>
+		
+	</head>
+	<body id="principal">
+
+		<div class="menu-bar" ><ul>
+			<li id="mn_Parametros">
+				<div class="menu-item">
+					<a href="#">Parametros</a>
+				</div>				
+				<div class="menu-controls">
+					<input type="submit" name="btnOk" value="ok" />
+					<input type="button" name="btnOcultar" value="ocultar" />
+				</div>
+				<div class="menu-content">
+					<fieldset>
+						<!--legend>Parametros</legend-->
+						<div class="div-lineal">
+							<label for="txt_N">N =</label> 
+							<input type="text" name="txt_N" id="txt_N" />
+						</div>
+						<div class="div-lineal">
+							<label for="txt_b">b =</label>
+							<input type="text" name="txt_b" id="txt_b" /> 
+							<span>(μm)</span>
+						</div>
+						<div class="div-lineal">
+							<label for="txt_d">d =</label>
+							<input type="text" name="txt_d" id="txt_d" /> 
+							<span>(μm)</span>
+						</div>
+						<div class="div-lineal">
+							<label for="txt_lambda">λ =</label>
+							<input type="text" name="txt_lambda" id="txt_lambda" /> 
+							<span>(nm)</span>
+						</div>
+						<div class="div-lineal">
+							<label for="txt_L">L =</label> 
+							<input type="text" name="txt_L" id="txt_L" />
+							<span>(mm)</span>
+						</div>
+					</fieldset>
+				</div>
+				
+			</li>
+			<li id="mn_Funciones">
+				<div class="menu-item">
+					<a href="#">Funciones</a>
+				</div>
+				<div class="menu-controls">
+					<input type="button" name="btnOcultar" value="ocultar" />
+				</div>
+				<div class="menu-content">
+					<fieldset>
+						<!--legend>Funciones</legend-->
+                        <table id="tabela-funciones">
+                            <thead>
+                                <tr>
+                                    <th>Patron</th>
+                                    <th>Visible</th>
+                                    <th>&nbsp;</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><input type="radio" name="opt_functionPatron" id="opt_patronInterferencia" value="INTERFERENCIA" /></td>
+                                    <td><input type="checkbox" name="chk_verInterferencia" id="chk_verInterferencia" /></td>
+							        <td><label for="chk_verInterferencia">interferencia</label></td>
+                                </tr>
+                                <tr>
+                                    <td><input type="radio" name="opt_functionPatron" id="opt_patronDifraccion" value="DIFRACCION" /></td>
+                                    <td><input type="checkbox" name="chk_verDifraccion" id="chk_verDifraccion" /></td>
+							        <td><label for="chk_verDifraccion">difraccion e interferencia</label></td>
+                                </tr>
+                                <tr>
+                                    <td><input type="radio" name="opt_functionPatron" id="opt_patronModulacion" value="MODULACION" /></td>
+							        <td><input type="checkbox" name="chk_verModulacion" id="chk_verModulacion" /></td>
+							        <td><label for="chk_verModulacion">difraccion</label></td>
+                                </tr>
+                            </tbody>
+                        </table>
+						<!--div class="div-lineal">
+							<span>P</span>
+							<span>V</span>
+						</div>
+						<div class="div-lineal">
+							<input type="radio" name="opt_functionPatron" id="opt_patronInterferencia" value="INTERFERENCIA" />
+							<input type="checkbox" name="chk_verInterferencia" id="chk_verInterferencia" />
+							<label for="chk_verInterferencia">interferencia</label>
+						</div>
+						<div class="div-lineal">
+							<input type="radio" name="opt_functionPatron" id="opt_patronDifraccion" value="DIFRACCION" />
+							<input type="checkbox" name="chk_verDifraccion" id="chk_verDifraccion" />
+							<label for="chk_verDifraccion">difraccion e interferencia</label>
+						</div>
+						<div class="div-lineal">
+							<input type="radio" name="opt_functionPatron" id="opt_patronModulacion" value="MODULACION" />
+							<input type="checkbox" name="chk_verModulacion" id="chk_verModulacion" />
+							<label for="chk_verModulacion">difraccion</label>
+						</div-->
+					</fieldset>
+				</div>
+			</li>
+		</ul></div>
+		
+		<div id="escena"><canvas id="cnt" width="1000" height="500"></canvas></div>
+		
+	</body>
+</html>

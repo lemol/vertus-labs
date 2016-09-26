@@ -1,0 +1,147 @@
+﻿#cabeza {
+	text-align: center;
+	background-color: #2f497a;
+}
+#tudo{
+	width: 950px;
+	margin: 30px auto 3px auto;
+}
+#cuerpo {
+	border: 8px dashed #2f497a;
+	background-color: #FFFFFF;
+}
+#pernas{
+	margin-top: 10px;
+	text-align: right;
+	font-family: Verdana, Geneva, Tahoma, sans-serif;
+	font-size: 9px;
+	color: #ffffff;
+}
+#nomes a:link, #nomes a:visited{
+	color: #CCCCFF;
+	font-weight: bold;
+	text-decoration: none;
+}
+.clear{
+    clear: both;
+    }
+#nomes a:hover{
+	color: #ffffff;
+	text-decoration: underline;
+}
+#tronco{
+	padding-left: 20px;
+    padding-right: 20px;
+    padding-bottom: 20px;
+    padding-top: 4px;
+    background-color: #ffffff;
+    overflow: auto;
+}
+#tronco > div {
+    overflow: hidden;
+}
+#coracao {
+    float: left;
+    margin-top: 20px;
+	width: 600px;
+    text-align: left;
+}
+#coracao div p {
+	text-align: justify;
+}
+#pulmao{
+    float: right;
+	vertical-align: top;
+	border-left: 2px #cccccc dashed;
+	margin-top: 40px;
+	padding-top: 40px;
+	padding-left: 10px;
+	width: 250px;
+}
+#pulmao > div {
+	padding-top: 10px;
+}
+fieldset {
+	font-size: 11px;
+	font-family: Tahoma, Verdana, Arial;
+}
+fieldset legend{
+	font-weight: bold;
+}
+input[type=text]{
+	font-size: 12px;
+	padding: 1px;
+}
+body {
+	font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+	font-size: 14px;
+	color: #353535;
+	text-align: center;
+	background-color: #2f497a;
+}
+.logo {
+	padding-top: 45px;
+	font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", Arial, sans-serif;
+	font-size: 37px;
+	font-weight: bold;
+	font-variant: small-caps;
+	color: #f0f0f0;
+	padding-bottom: 35px;
+}
+.hr-curto {
+	width: 650px;
+}
+
+.ul-horizontal li {
+	display: inline;
+	list-style-type: none;
+	list-style-type: none;
+}
+#menu-horizontal  ul {
+	border: solid 1px #006699;
+	background-color: #ffffff;
+	padding: 0px 6px;
+	margin: 0px;
+}
+
+#menu-horizontal  ul  li {
+	padding: 0px;
+	margin: 0px;
+}
+#menu-horizontal  ul  li a:link, #menu-horizontal  ul  li a:visited {
+	padding: 10px;
+	display: inline-block;
+	text-decoration: none;
+	font-family: Verdana, Geneva, Tahoma, sans-serif;
+	font-size: 11px;
+	color: #006699;
+	font-weight: bold;
+}
+#menu-horizontal  ul  li a:hover, #menu-horizontal  ul  li a:active, #menu-horizontal  ul  li a.actual {
+	color: #ffffff !important;
+	background-color: #006699;
+}
+.tabela-1{
+	text-align: center;
+}
+.tabela-1 td{
+	padding: 2px 4px;
+}
+h3 {
+	background-color: #009999;
+	text-align: right;
+	color: #99FF66;
+}
+#lista {
+	font-size: 14px;
+	font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande", "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+	list-style-type: lower-greek;
+}
+a:link, a:visited {
+	color: #0000ff;
+	text-decoration: none;
+}
+a:hover{
+	color: #ff0000;
+	text-decoration: underline;
+}

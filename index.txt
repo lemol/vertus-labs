@@ -1,0 +1,5 @@
+gravedad
+mru-1
+tubo-rayos-catodicos
+difraccion-1
+polarizacion

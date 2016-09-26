@@ -1,0 +1,146 @@
+﻿
+.menu-bar
+{
+    position: fixed;
+    left: 0px;
+    bottom: 0px;
+    height: 30px;
+    background-color: #5c87b2;
+    border-top: 1px solid #f0f0f0;
+    width: 100%;
+}
+
+.menu-bar > ul
+{
+    padding: 0px 10px;
+    margin: 0px;
+}
+
+.menu-bar > ul > li
+{
+	padding: 0px 9px;
+	position: relative;
+	list-style: none;
+	display: inline-block;
+	margin: 0px 0px;
+}
+
+.menu-bar > ul > li div.menu-content
+{
+	position: absolute;
+	bottom: 30px;
+	background-color: #5C87B2;
+	border: 1px solid #f0f0f0;
+	border-bottom-color: #5C87B2;
+	display: none;
+}
+
+.menu-bar > ul > li.presente div.menu-content
+{
+    opacity: 0;
+	display: block;
+}
+
+.menu-bar > ul > li.visivel div.menu-content
+{
+    opacity: 0.2;
+}
+
+.menu-bar > ul > li.focus div.menu-content
+{
+    opacity: 1;
+}
+
+.menu-bar > ul > li div.menu-content fieldset
+{
+	border: none;
+}
+
+.menu-bar > ul > li div.menu-content legend
+{
+    font-size: 12px;
+    font-weight: bold;
+    font-family: Tahoma, Arial, Verdana;
+    background-color: #001302;
+    padding:0px 5px;
+    border:1px solid #f0f0f0;
+}
+
+.menu-bar > ul > li div.menu-item {
+	display: inline-block;
+}
+
+.menu-bar > ul > li.presente div.menu-item
+{
+    
+}
+
+.menu-bar > ul > li.visivel div.menu-item
+{
+    opacity: 0.5;
+}
+
+.menu-bar > ul > li.focus div.menu-item
+{
+    opacity: 0;
+    display: none;
+}
+
+.menu-bar > ul > li div.menu-item a, #menu-bar > ul > li div.menu-item a:visited
+{
+	text-align: center;
+    display: block;
+    line-height: 30px;
+    padding-left: 5px;
+    padding-right: 5px;
+    border-left: 1px solid transparent;
+    border-right: 1px solid transparent;
+    text-decoration: none;
+    color: #ffeddd;
+    font-weight: bold;
+}
+
+.menu-bar > ul > li div.menu-item a:hover, .menu-bar > ul > li.presente div.menu-item a, #menu-bar > ul > li.presente div.menu-item a:visited
+{
+    background-color: #2f497a;
+    border-color: #f0f0f0;
+
+}
+
+.menu-bar > ul > li.visivel div.menu-item a, #menu-bar > ul > li.visivel div.menu-item a:visited
+{
+    background-color: transparent;
+    border-color: transparent;
+
+}
+
+.menu-bar > ul > li div.menu-controls
+{
+    /*border-left: 1px solid transparent;
+    border-right: 1px solid transparent;*/
+	line-height: 30px;
+	text-align: center;
+	display: none;
+}
+
+.menu-bar > ul > li.presente div.menu-controls
+{
+
+}
+
+.menu-bar > ul > li.visivel div.menu-controls
+{
+	
+}
+
+.menu-bar > ul > li.focus div.menu-controls
+{
+	display: inline-block;
+}
+
+.opcion
+{
+    position: absolute;
+    display: none;
+    background-color: #808080;
+}

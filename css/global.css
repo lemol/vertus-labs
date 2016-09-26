@@ -1,0 +1,68 @@
+﻿body
+{
+    background-color: #2f497a;
+    font-family: Calibri, Verdana, Tahoma, Arial;
+    font-size: 12px;
+}
+canvas
+{
+}
+
+#principal > div
+{
+    
+}
+
+#panel-control
+{
+    background-color: #ffffff;
+    float: left;
+}
+
+#escena
+{
+    padding: 0px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    width: 1000px;
+    border: 2px solid #ffffff;
+    background-color: #000000;
+}
+
+#resultados
+{
+    float: left;
+    width: 200px;
+    color: #ffffff;
+}
+
+#tiempo
+{
+    color: #ffffff;
+}
+
+label
+{
+}
+
+#parametros
+{
+    
+}
+
+#parametros input[type=input]
+{
+    clear: right;
+}
+
+.div-lineal
+{
+    margin-bottom: 2px;
+}
+
+#txt_anguloP
+{
+    width: 50px;
+}
