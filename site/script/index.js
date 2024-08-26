@@ -55,7 +55,7 @@ $(function(){
 	$.ajax({
 		url: 'index.json',
 		success: function(data){
-            data = JSON.parse(data);
+            // data = JSON.parse(data);
             carregar(data);
         }
 	});
